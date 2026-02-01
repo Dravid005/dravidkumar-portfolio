@@ -1060,3 +1060,100 @@ footer {
 .visible {
     will-change: auto;
 }
+
+/* ============================================
+   CONTEXT-SWITCHING HUD NAVIGATION v2.0 (OPTIMIZED)
+   ============================================ */
+:root {
+    --hud-bg: rgba(10, 14, 26, 0.75);
+    --hud-border: rgba(0, 255, 136, 0.25);
+    --hud-text: rgba(248, 249, 250, 0.6);
+    --hud-text-active: #f8f9fa;
+    --hud-cricket: rgba(255, 51, 102, 0.4);
+    --hud-cricket-glow: rgba(255, 51, 102, 0.3);
+    --hud-cricket-text: #ff3366;
+    --hud-code: rgba(0, 212, 255, 0.4);
+    --hud-code-glow: rgba(0, 212, 255, 0.3);
+    --hud-code-text: #00d4ff;
+    --hud-hybrid: rgba(138, 43, 226, 0.4);
+    --hud-hybrid-glow: rgba(138, 43, 226, 0.3);
+    --hud-hybrid-text: #8a2be2;
+    --hud-neutral: rgba(0, 255, 136, 0.15);
+    --hud-neutral-glow: rgba(0, 255, 136, 0.3);
+    --hud-blur: 12px;
+    --hud-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hud-nav {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+    z-index: 9999;
+    transition: transform 0.2s cubic-bezier(0.1, 0.9, 0.2, 1), opacity 0.2s ease;
+    will-change: transform;
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* iPhone Safe Area Support */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .hud-nav {
+        bottom: calc(30px + env(safe-area-inset-bottom));
+    }
+}
+
+.hud-nav.loaded { opacity: 1; visibility: visible; }
+.hud-nav.hidden { transform: translate3d(-50%, 150%, 0); opacity: 0; pointer-events: none; }
+
+.hud-container {
+    display: flex; align-items: center; gap: 8px; padding: 12px 20px;
+    background: var(--hud-bg);
+    backdrop-filter: blur(var(--hud-blur)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--hud-blur)) saturate(180%);
+    border: 1px solid var(--hud-border);
+    border-radius: 50px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    contain: layout style;
+}
+
+/* Context Animations */
+.hud-container.context-cricket { border-color: var(--hud-cricket); animation: cricketPulse 2s ease-in-out infinite; }
+.hud-container.context-code { border-color: var(--hud-code); animation: codeGlitch 3s ease-in-out infinite; }
+.hud-container.context-hybrid { border-color: var(--hud-hybrid); box-shadow: 0 0 60px var(--hud-hybrid-glow); }
+
+/* Items */
+.hud-item {
+    display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+    border-radius: 30px; color: var(--hud-text); text-decoration: none;
+    transition: all var(--hud-transition); position: relative;
+    max-width: 42px; min-height: 42px; min-width: 42px;
+    overflow: hidden; contain: layout;
+}
+
+.hud-item:hover { background: rgba(255, 255, 255, 0.05); color: var(--hud-text-active); }
+.hud-item.active { background: var(--hud-neutral); color: var(--hud-text-active); max-width: 200px; padding-right: 18px; }
+
+/* Active Contexts */
+.hud-item.active[data-context="cricket"] { background: rgba(255, 51, 102, 0.15); color: var(--hud-cricket-text); box-shadow: 0 0 20px var(--hud-cricket-glow); }
+.hud-item.active[data-context="code"] { background: rgba(0, 212, 255, 0.15); color: var(--hud-code-text); box-shadow: 0 0 20px var(--hud-code-glow); }
+.hud-item.active[data-context="hybrid"] { background: rgba(138, 43, 226, 0.15); color: var(--hud-hybrid-text); box-shadow: 0 0 20px var(--hud-hybrid-glow); }
+
+.hud-icon { font-size: 20px; flex-shrink: 0; transition: inherit; }
+.hud-item.active .hud-icon { transform: scale(1.1); filter: drop-shadow(0 0 8px currentColor); }
+
+.hud-label {
+    font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 600;
+    opacity: 0; transform: translateX(-10px); transition: all var(--hud-transition); white-space: nowrap;
+}
+.hud-item.active .hud-label { opacity: 1; transform: translateX(0); }
+
+@keyframes cricketPulse { 0%, 100% { box-shadow: 0 0 40px var(--hud-cricket-glow); } 50% { box-shadow: 0 0 80px rgba(255, 51, 102, 0.5); } }
+@keyframes codeGlitch { 0%, 100% { box-shadow: 0 0 40px var(--hud-code-glow); } 33% { transform: translateX(1px); } 66% { transform: translateX(-1px); } }
+
+@media (max-width: 768px) {
+    .hud-nav { bottom: 20px; }
+    .hud-container { padding: 10px 16px; gap: 6px; }
+    .hud-item { padding: 8px 10px; max-width: 38px; }
+    .hud-item.active { max-width: 160px; }
+}

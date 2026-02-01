@@ -443,5 +443,152 @@ if (!isMobile) {
     }, { passive: true });
 }
 
+(function() {
+    'use strict';
+    
+    // CONFIGURATION & FEATURES
+    const FEATURES = { updateURLHash: true, hapticFeedback: false, keyboardNavigation: true, verboseLogging: false };
+    const CONFIG = {
+        scrollThreshold: 10,       // Lower threshold to detect 'up' movement faster
+        sectionOffsetTop: 150,
+        transitionDuration: 200,   // Faster animation (was 300)
+        hapticDuration: 10,
+        observerMargin: '-150px 0px'
+    };
+    
+    // DOM ELEMENTS
+    const hudNav = document.getElementById('hudNav');
+    const hudContainer = document.querySelector('.hud-container');
+    const hudItems = document.querySelectorAll('.hud-item');
+    const sections = document.querySelectorAll('section[id]');
+    
+    if (!hudNav || !hudContainer || hudItems.length === 0) return;
+
+    // STATE
+    let lastScrollY = window.scrollY;
+    let isScrolling = false;
+    let isAutoScrolling = false;
+    let activeSection = 'home';
+    const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth <= 768;
+
+    // UTILITIES
+    const log = (...args) => FEATURES.verboseLogging && console.log('🎯 [HUD]', ...args);
+    const triggerHaptic = () => { if (FEATURES.hapticFeedback && isMobile && 'vibrate' in navigator) navigator.vibrate(CONFIG.hapticDuration); };
+
+    // SCROLL HANDLER (SMART HIDE)
+    function handleScroll() {
+        if (!isScrolling) {
+            isScrolling = true;
+            
+            window.requestAnimationFrame(() => {
+                // If we are auto-scrolling (from a click), DO NOT HIDE.
+                if (isAutoScrolling) {
+                    isScrolling = false;
+                    return;
+                }
+
+                const currentY = window.scrollY;
+                
+                // Only hide if we scroll DOWN more than 10px
+                const direction = currentY > lastScrollY + 10 ? 'down' : 'up';
+                
+                // Show if going UP or at the very TOP
+                if (currentY < 50 || direction === 'up') {
+                    hudNav.classList.remove('hidden');
+                } 
+                // Hide only if going DOWN and not at top
+                else if (direction === 'down') {
+                    hudNav.classList.add('hidden');
+                }
+                
+                lastScrollY = currentY;
+                isScrolling = false;
+            });
+        }
+    }
+
+    // ACTIVE ITEM UPDATER
+    function updateActiveState(sectionId) {
+        if (activeSection === sectionId) return;
+        activeSection = sectionId;
+        
+        hudItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = item.getAttribute('href');
+            const target = document.querySelector(targetId);
+            
+            if (target) {
+                // 1. Lock the nav bar so it stays visible
+                isAutoScrolling = true; 
+                hudNav.classList.remove('hidden'); // Force show
+                
+                // 2. Scroll smoothly
+                window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
+                
+                // 3. Unlock it after the scroll finishes (approx 1 second)
+                setTimeout(() => {
+                    isAutoScrolling = false;
+                    // Optional: Reset lastScrollY so it doesn't jump
+                    lastScrollY = window.scrollY; 
+                }, 1000);
+            }
+        });
+    });
+        
+        if (FEATURES.updateURLHash && history.replaceState) {
+            history.replaceState(null, null, `#${sectionId}`);
+        }
+    }
+
+    // INTERSECTION OBSERVER
+    const observer = new IntersectionObserver((entries) => {
+        let bestCandidate = null;
+        let highestRatio = 0;
+
+        entries.forEach(entry => {
+            if (entry.intersectionRatio > highestRatio) {
+                highestRatio = entry.intersectionRatio;
+                bestCandidate = entry;
+            }
+        });
+
+        if (bestCandidate && bestCandidate.isIntersecting) {
+            updateActiveState(bestCandidate.target.id);
+        }
+    }, { rootMargin: CONFIG.observerMargin, threshold: [0, 0.25, 0.5, 0.75, 1] });
+
+    sections.forEach(section => observer.observe(section));
+
+    // CLICK HANDLER
+    hudItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = item.getAttribute('href');
+            const target = document.querySelector(targetId);
+            if (target) {
+                window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' });
+                if (isMobile) setTimeout(() => hudNav.classList.add('hidden'), 1000);
+            }
+        });
+    });
+
+    // KEYBOARD NAV
+    if (FEATURES.keyboardNavigation) {
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                const currentIdx = Array.from(hudItems).findIndex(i => i.classList.contains('active'));
+                const nextIdx = e.key === 'ArrowRight' ? (currentIdx + 1) % hudItems.length : (currentIdx - 1 + hudItems.length) % hudItems.length;
+                hudItems[nextIdx].click();
+            }
+        });
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // INIT ANIMATION
+    setTimeout(() => hudNav.classList.add('loaded'), 500);
+})();
+
 console.log('🏏 Portfolio loaded successfully! Built with discipline. Deployed with precision.');
 console.log('💡 Tip: Try the Konami Code (↑↑↓↓←→←→BA) for a surprise!');
