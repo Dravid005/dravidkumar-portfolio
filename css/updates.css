@@ -1,0 +1,343 @@
+/* ============================================
+   DRAVID KUMAR PORTFOLIO - CSS UPDATES
+   Drop this file in your css/ folder.
+   Already linked in updated index.html.
+   ============================================ */
+
+/* ------------------------------------------
+   0. FIX: Hero overlap with Origin Story
+   ------------------------------------------ */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.origin-story {
+    position: relative;
+    z-index: 2;
+    /* Keep transparent so space particles show through */
+}
+
+/* ------------------------------------------
+   1. HERO BADGE (Featured Writer)
+   ------------------------------------------ */
+.publication-badge-hero {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.hero-badge {
+    background: rgba(100, 255, 218, 0.08);
+    color: #64ffda;
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(100, 255, 218, 0.25);
+    font-family: 'Rajdhani', sans-serif;
+    letter-spacing: 1.5px;
+    display: inline-block;
+    animation: badgePulse 3s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(100, 255, 218, 0.15); }
+    50% { box-shadow: 0 0 12px 3px rgba(100, 255, 218, 0.15); }
+}
+
+/* ------------------------------------------
+   2. GITHUB ICON IN HERO
+   ------------------------------------------ */
+.github-hero-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.github-hero-icon:hover {
+    background: rgba(100, 255, 218, 0.1);
+    border-color: #64ffda;
+    color: #64ffda;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(100, 255, 218, 0.15);
+}
+
+/* ------------------------------------------
+   3. CRICKET COMEBACK TIMELINE ENTRY
+   ------------------------------------------ */
+.timeline-future .timeline-content {
+    border-left: 2px dashed rgba(100, 255, 218, 0.4);
+    padding-left: 1rem;
+    opacity: 0.85;
+}
+
+.marker-future {
+    background: transparent !important;
+    border: 2px dashed #64ffda !important;
+    animation: markerPulse 2s ease-in-out infinite;
+}
+
+@keyframes markerPulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.2); opacity: 1; }
+}
+
+.future-year {
+    color: #64ffda;
+    font-style: italic;
+    letter-spacing: 2px;
+}
+
+.comeback-tag {
+    display: inline-block;
+    margin-top: 0.75rem;
+    background: rgba(100, 255, 218, 0.08);
+    color: #64ffda;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    border: 1px solid rgba(100, 255, 218, 0.2);
+}
+
+/* ------------------------------------------
+   4. LATEST WRITING SNIPPET (in Playbook)
+   ------------------------------------------ */
+.latest-writing {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(100, 255, 218, 0.12);
+    border-radius: 8px;
+    background: rgba(100, 255, 218, 0.03);
+}
+
+.writing-header {
+    margin-bottom: 1.2rem;
+}
+
+.writing-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: #64ffda;
+    opacity: 0.8;
+}
+
+.writing-cards-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 640px) {
+    .writing-cards-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.writing-card {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: border-color 0.3s ease;
+}
+
+.writing-card:hover {
+    border-color: rgba(100, 255, 218, 0.2);
+}
+
+.writing-platform {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    color: #64ffda;
+    opacity: 0.7;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.writing-card h4 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e0e0e0;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.writing-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 0.75rem;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.writing-link {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.85rem;
+    color: #64ffda;
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: opacity 0.2s;
+}
+
+.writing-link:hover {
+    opacity: 0.7;
+}
+
+/* ------------------------------------------
+   5. CLIENT BADGE ON PROJECT CARD
+   ------------------------------------------ */
+.project-card-client .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.client-badge {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.55rem;
+    letter-spacing: 2px;
+    color: #0a0a0a;
+    background: #64ffda;
+    padding: 0.3rem 0.6rem;
+    border-radius: 3px;
+    white-space: nowrap;
+    margin-left: 1rem;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+}
+
+/* ------------------------------------------
+   6. PUBLICATIONS SECTION
+   ------------------------------------------ */
+.publications {
+    padding: 6rem 0;
+}
+
+.publications-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+    .publications-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.publication-card {
+    padding: 2rem;
+    border: 1px solid rgba(100, 255, 218, 0.15);
+    border-radius: 8px;
+    background: rgba(100, 255, 218, 0.03);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.publication-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #64ffda, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.publication-card:hover {
+    border-color: rgba(100, 255, 218, 0.35);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+}
+
+.publication-card:hover::before {
+    opacity: 1;
+}
+
+.pub-badge {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 2.5px;
+    color: #64ffda;
+    opacity: 0.8;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.publication-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #e8e8e8;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+}
+
+.publication-description {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.6;
+    margin-bottom: 1.2rem;
+}
+
+.publication-meta {
+    display: flex;
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.publication-link {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #64ffda;
+    text-decoration: none;
+    letter-spacing: 1.5px;
+    border-bottom: 1px solid rgba(100, 255, 218, 0.3);
+    padding-bottom: 2px;
+    transition: all 0.2s ease;
+}
+
+.publication-link:hover {
+    border-bottom-color: #64ffda;
+    opacity: 0.8;
+}
+
+/* ------------------------------------------
+   7. QUICK REMINDER NOTES FOR YOU
+   ------------------------------------------ */
+
+/*
+   🔴 TODO LIST (replace placeholder text):
+   
+   1. Replace all "YOUR_ARTICLE_LINK_HERE" with your actual Medium article URLs
+   2. Add og:image — take a screenshot of your portfolio hero section,
+      save it as assets/images/og-preview.png (1200x630px is ideal)
+   3. The "Writing" nav item uses ri-article-line icon — 
+      make sure remixicon has this (it does in v3.5.0 ✅)
+*/
